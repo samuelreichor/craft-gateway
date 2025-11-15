@@ -1,0 +1,28 @@
+{% extends "_layouts/cp.twig" %}
+{% set title = "Gateway Schemas" %}
+{% set selectedSubnavItem = 'schemas' %}
+
+{% do view.registerAssetBundle('craft\\web\\assets\\admintable\\AdminTableAsset') -%}
+
+{% block actionButton %}
+  <a class="btn submit add icon" href="{{ url('gateway/schemas/new') }}">{{ "New schema"|t('app') }}</a>
+{% endblock %}
+
+{% block content %}
+  <div id="schemas-vue-admin-table"></div>
+{% endblock %}
+
+{% js %}
+  const columns = [
+  { name: '__slot:title', title: Craft.t('app', 'Name') },
+  { name: 'usage', title: Craft.t('app', 'Used by') }
+  ];
+
+  new Craft.VueAdminTable({
+  columns: columns,
+  container: '#schemas-vue-admin-table',
+  deleteAction: 'gateway/schema/delete-schema',
+  emptyMessage: 'No Gateway schemas exist yet.',
+  tableData: {{ getAllSchemas()|json_encode|raw }}
+  });
+{% endjs %}

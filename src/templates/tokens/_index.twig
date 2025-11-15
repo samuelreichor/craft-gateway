@@ -1,0 +1,29 @@
+{% extends "_layouts/cp.twig" %}
+{% set title = "Gateway Tokens" %}
+{% set selectedSubnavItem = 'tokens' %}
+
+{% do view.registerAssetBundle('craft\\web\\assets\\admintable\\AdminTableAsset') -%}
+
+{% block actionButton %}
+  <a class="btn submit add icon" href="{{ url('gateway/tokens/new') }}">{{ "New token"|t('app') }}</a>
+{% endblock %}
+
+{% block content %}
+  <div id="tokens-vue-admin-table"></div>
+{% endblock %}
+
+{% js %}
+  var columns = [
+  { name: '__slot:title', title: Craft.t('app', 'Name') },
+  { name: 'dateCreated', title: Craft.t('app', 'Date Created') },
+  { name: 'dateUpdated', title: Craft.t('app', 'Date Updated') },
+  ];
+
+  new Craft.VueAdminTable({
+  columns: columns,
+  container: '#tokens-vue-admin-table',
+  deleteAction: 'gateway/token/delete-token',
+  emptyMessage: Craft.t('app', 'No Gateway tokens exist yet.'),
+  tableData: {{ getAllTokens()|json_encode|raw }}
+  });
+{% endjs %}
